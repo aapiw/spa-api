@@ -1,20 +1,18 @@
 class ApplicationController < ActionController::API
   respond_to :json
 
-  before_action :current_user
+  # before_action :current_user
   before_action :authenticate_token
 
   def authenticate_token
-    binding.pry
-    render json: {success: false, status: :unauthorized, message: "No Authorization"} unless @current_user.present?
+    render json: {success: false, status: :unauthorized, message: "No Authorization"} unless current_user.present?
   end
 
   def current_user
     begin
       @current_user ||= User.find(payload['user_id'])
     rescue Exception => e
-      # false
-      @current_user = nil
+      nil
     end
   end
 

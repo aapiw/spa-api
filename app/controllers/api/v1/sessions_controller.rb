@@ -18,9 +18,8 @@ class Api::V1::SessionsController < ApplicationController
 	end
 	
 	def destroy
-		binding.pry
-	  @current_user&.authentication_token = nil
-	  if @current_user&.save
+	  current_user&.authentication_token = nil
+	  if current_user&.save
 	    head(:ok)
 	  else
 	    head(:unauthorized)
