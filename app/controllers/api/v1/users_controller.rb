@@ -1,13 +1,13 @@
 class Api::V1::UsersController < ApplicationController
 	before_action :set_user, only: [:show, :edit, :update, :destroy]
-
+	skip_before_action :authenticate_token, only: [:create]
 	# GET /users
 	# GET /users.json
 	def index
-		if params["filters"] and params["filters"].select{|k,v| v.present?}.present?
+		if params["filters"]&.select{|k,v| v.present?}.present?
 			@users = User.filter_users(params["filters"], params[:page])
 		else
-			@users = User.page(params[:page]).per(10)
+			@users = User.page(params[:page]).per(5)
 		end
 		render :index
 	end
@@ -27,7 +27,6 @@ class Api::V1::UsersController < ApplicationController
 	# POST /users
 	# POST /users.json
 	def create
-		# binding.pry
 		@user = User.new(user_params)
 		if @user.save
 			render :create

@@ -6,8 +6,8 @@ class User < ApplicationRecord
   
   scope :search_name, -> (name) { where('lower(name) LIKE ?', "%#{name.downcase}%") }
   scope :search_email, -> (email) { where('lower(email) LIKE ?', "%#{email.downcase}%") }
-  scope :search_facebook_present, -> () { where.not(facebook_url: nil) }
-  scope :search_facebook_twitter, -> () { where.not(twitter: nil) }
+  scope :search_facebook_present, -> (a) { where.not(facebook_url: nil) }
+  scope :search_twitter_present, -> (a) { where.not(twitter: nil) }
 
 	class << self
 	  def filter_users filters, page
@@ -15,7 +15,7 @@ class User < ApplicationRecord
 	   filters.each do |key, value|
 	     users = users.public_send("search_#{key}", value ) if value.present?
 	   end
-	   Kaminari.paginate_array(users).page(page).per(10)
+	   Kaminari.paginate_array(users).page(page).per(5)
 	  end
 	end
 
